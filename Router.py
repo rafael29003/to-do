@@ -1,9 +1,9 @@
-from typing import Annotated, Union
+from typing import Annotated, Union, Counter
 
 from fastapi import APIRouter, Depends, Query
 
 from repo import RepoTask
-from shemas import TaskADD, Task, ErrorResponse
+from shemas import TaskADD, Task, ErrorResponse, CounterTask
 
 router = APIRouter(
     prefix="/tasks",
@@ -35,10 +35,18 @@ async def delete_task(task_id: int) -> Union[ErrorResponse, dict[str, bool]]:
         return ErrorResponse(ok=False, message="Task not found")
     return {"ok": True}
 
-@router.get("/count", summary="Количество заданий", description="Получение количества заданий в базе данных")
-async def get_count() -> str: 
+@router.get("/count/col", summary="Количество выполненных заданий", description="Получение количества выполненных заданий в базе данных")
+async def get_count_completed() -> dict[str , str]:
     count = await RepoTask.count_tasks()
-    return {"message" : f"В базе данных {count} заданий"}
+    return {"answer": f"В базе данных {count} выполненных заданий"}
+
+@router.delete("/by-name/name" , summary="Удаление по имени", description="Удаление задания по названию")
+async def delete_task_by_name(name: str) -> Union[ErrorResponse, dict[str, bool]]:
+    result = await RepoTask.delete_task_by_name(name)
+    if not result:
+        return ErrorResponse(ok=False, message="Task not found")
+    return {"ok": True}
+
 
 
 

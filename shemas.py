@@ -13,3 +13,8 @@ class Task(TaskADD):
 class ErrorResponse(BaseModel):
     ok: bool
     message: str
+
+class CounterTask(BaseModel):
+    answer : str
+
+
