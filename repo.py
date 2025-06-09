@@ -41,14 +41,6 @@ class RepoTask:
             return result.rowcount > 0
     
     @classmethod
-    async def delete_task_by_name(cls, name: str) -> bool:
-        async with new_session() as session:
-            query = delete(TaskTabel).where(TaskTabel.name == name)
-            result = await session.execute(query)
-            await session.commit()
-            return result.rowcount > 0
-    
-    @classmethod
     async def count_tasks(cls) -> int:
         async with new_session() as session:
             query = select(func.count()).select_from(TaskTabel)

@@ -35,13 +35,6 @@ async def delete_task(task_id: int) -> Union[ErrorResponse, dict[str, bool]]:
         return ErrorResponse(ok=False, message="Task not found")
     return {"ok": True}
 
-@router.delete("/by-name/{name}", summary="Удаление задания по названию", description="Удаление задания из базы данных по названию")
-async def delete_task_by_name(name: str) -> Union[ErrorResponse, dict[str, bool]]:
-    result = await RepoTask.delete_task_by_name(name)
-    if not result:
-        return ErrorResponse(ok=False, message="Task not found")
-    return {"ok": True}
-
 @router.get("/count", summary="Количество заданий", description="Получение количества заданий в базе данных")
 async def get_count() -> str: 
     count = await RepoTask.count_tasks()
