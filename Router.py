@@ -47,6 +47,14 @@ async def delete_task_by_name(name: str) -> Union[ErrorResponse, dict[str, bool]
         return ErrorResponse(ok=False, message="Task not found")
     return {"ok": True}
 
+@router.put("/{task_id}/done", summary="Отметить задание как выполненное", description="Отметить задание как выполненное")
+async def mark_task_done(task_id: int) -> Union[ErrorResponse, dict[str, bool]]:
+    result = await RepoTask.mark_task_done(task_id)
+    if not result:
+        return ErrorResponse(ok=False, message="Task not found")
+    return {"ok": True}
+
+
 
 
 

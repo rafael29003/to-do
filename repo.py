@@ -1,4 +1,4 @@
-from sqlalchemy import select, delete, func
+from sqlalchemy import select, delete, func, update
 
 from database import new_session, TaskTabel
 from shemas import TaskADD, Task
@@ -21,7 +21,7 @@ class RepoTask:
             query = select(TaskTabel)
             result = await session.execute(query)
             task_models = result.scalars().all()
-            task_shemas = [Task.model_validate(task_model.__dict__) for task_model in task_models]
+            task_shemas = [Task.model_validate(task_model) for task_model in task_models]
             return task_shemas
     
     @classmethod
@@ -52,6 +52,14 @@ class RepoTask:
     async def delete_task_by_name(cls, name: str) -> bool:
         async with new_session() as session:
             query = delete(TaskTabel).where(TaskTabel.name == name)
+            result = await session.execute(query)
+            await session.commit()
+            return result.rowcount > 0
+
+    @classmethod
+    async def mark_task_done(cls, task_id):
+        async with new_session() as session:
+            query = update(TaskTabel).where(TaskTabel.id == task_id).values(done=True)
             result = await session.execute(query)
             await session.commit()
             return result.rowcount > 0

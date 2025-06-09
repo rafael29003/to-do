@@ -15,6 +15,7 @@ class TaskTabel(Model):
     __tablename__ = "tasks"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    done: Mapped[bool] = mapped_column(default=False)
     name: Mapped[str] = mapped_column()
     description: Mapped[str | None] = mapped_column(nullable=True)
 

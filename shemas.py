@@ -8,6 +8,7 @@ class TaskADD(BaseModel):
 
 class Task(TaskADD):
     id: int
+    done:bool = False
 
 
 class ErrorResponse(BaseModel):
